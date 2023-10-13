@@ -1,0 +1,13 @@
+import psutil,platform
+running_processes=psutil.process_iter(attrs=['pid','name'])
+process_dict={}
+for process in running_processes:
+    process_info=process.info;process_name=process_info['name']
+    if process_name.endswith('.exe'):process_dict[process_name]=process_info['pid']
+print('.exe processes:')
+for(idx,(name,pid))in enumerate(process_dict.items()):print(f"{idx+1}. {name} (PID: {pid}")
+try:
+    choice=int(input('Enter the number of the process to close: '))
+    if 1<=choice<=len(process_dict):selected_pid=list(process_dict.values())[choice-1];selected_process=psutil.Process(selected_pid);selected_process.terminate();print(f"Process {selected_pid} has been terminated.")
+    else:print('Invalid choice.')
+except ValueError:print('Invalid input. Please enter a valid number.')
